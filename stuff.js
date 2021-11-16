@@ -3,7 +3,7 @@ import { OrbitControls } from 'https://cdn.skypack.dev/three/examples/jsm/contro
 import Stats from 'https://cdn.skypack.dev/three/examples/jsm/libs/stats.module.js';
 
 //#########################################
-const LINES = true
+const LINES = true // true for trails on
 //#########################################
 
 const container = document.getElementById('container');
@@ -33,7 +33,7 @@ class Sail {
         this.vel = vel
         this.acc = 0
         this.points = []
-        this.geom = new THREE.SphereGeometry(1, 5, 5);
+        this.geom = new THREE.SphereGeometry(1, 5, 5); // radius, triangles h, triangles w
         this.mat = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
         this.s = new THREE.Mesh(this.geom, this.mat);
     }
@@ -47,7 +47,7 @@ class Sail {
 
 let sails = []
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 50; i++) { // number of sails
     const p = new THREE.Vector3(3 * Math.random() - 1.5, 3 * Math.random() - 1.5, 3 * Math.random() - 1.5);
     p.multiplyScalar(10)
     const v = new THREE.Vector3(Math.random() * 4 - 2, Math.random() * 4 - 2, Math.random() * 4 - 2);
@@ -66,7 +66,7 @@ const texture = loader.load(
         scene.background = rt.texture;
     });
 
-const sun = 50
+const sun = 50 // sun mass
 
 const materiall = new THREE.LineBasicMaterial({
     color: 0xffffff
@@ -90,7 +90,7 @@ const animate = function () {
                 }
                 geoms[i].setFromPoints(sails[i].points);
                 lines[i] = new THREE.Line(geoms[i], materiall);
-                if (frame > 100) {
+                if (frame > 100) { // number of frames before trail starts going away
                     sails[i].points.shift()
                 }
             }
