@@ -2,6 +2,10 @@ import * as THREE from 'https://cdn.skypack.dev/three';
 import { OrbitControls } from 'https://cdn.skypack.dev/three/examples/jsm/controls/OrbitControls.js';
 import Stats from 'https://cdn.skypack.dev/three/examples/jsm/libs/stats.module.js';
 
+//#########################################
+const LINES = true
+//#########################################
+
 const container = document.getElementById('container');
 
 const stats = new Stats();
@@ -43,7 +47,7 @@ class Sail {
 
 let sails = []
 
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 50; i++) {
     const p = new THREE.Vector3(3 * Math.random() - 1.5, 3 * Math.random() - 1.5, 3 * Math.random() - 1.5);
     p.multiplyScalar(10)
     const v = new THREE.Vector3(Math.random() * 4 - 2, Math.random() * 4 - 2, Math.random() * 4 - 2);
@@ -69,18 +73,26 @@ const materiall = new THREE.LineBasicMaterial({
 });
 
 let frame = 0
+const geoms = []
 const animate = function () {
     stats.update();
     const lines = []
+
     requestAnimationFrame(animate);
 
     frame++
     for (let i = 0; i < sails.length; i++) {
         if (!sails[i].dead) {
-            const geometryy = new THREE.BufferGeometry().setFromPoints(sails[i].points);
-            lines[i] = new THREE.Line(geometryy, materiall);
-            if (frame > 500) {
-                sails[i].points.shift()
+            if (LINES) {
+                if (frame == 1) {
+                    console.log("dingus")
+                    geoms[i] = new THREE.BufferGeometry()
+                }
+                geoms[i].setFromPoints(sails[i].points);
+                lines[i] = new THREE.Line(geoms[i], materiall);
+                if (frame > 100) {
+                    sails[i].points.shift()
+                }
             }
             const f = sun / (Math.pow(sails[i].pos.length(), 2))
             const nv = sails[i].pos.clone()
@@ -89,18 +101,25 @@ const animate = function () {
             sails[i].vel.add(nv)
             sails[i].pos.add(sails[i].vel)
             sails[i].updatePos()
-            sails[i].points.push(sails[i].pos.clone())
-            scene.add(lines[i]);
-            if (sails[i].pos.length() <= 5 || sails[i].pos.length() >= 500) {
+            if (LINES) {
+                sails[i].points.push(sails[i].pos.clone())
+                scene.add(lines[i]);
+            }
+            if (sails[i].pos.length() <= 6 || sails[i].pos.length() >= 500) {
                 sails[i].dead = true
                 scene.remove(sails[i].s)
+                if (LINES) {
+                    geoms[i].dispose()
+                }
             }
         }
     }
 
     renderer.render(scene, camera);
-    for (let i = 0; i < sails.length; i++) {
-        scene.remove(lines[i])
+    if (LINES) {
+        for (let i = 0; i < sails.length; i++) {
+            scene.remove(lines[i])
+        }
     }
 };
 
