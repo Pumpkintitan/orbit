@@ -1,6 +1,6 @@
-import * as THREE from 'https://cdn.skypack.dev/three';
-import { OrbitControls } from 'https://cdn.skypack.dev/three/examples/jsm/controls/OrbitControls.js';
-import Stats from 'https://cdn.skypack.dev/three/examples/jsm/libs/stats.module.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'OrbitControls';
+import Stats from 'Stats';
 
 //#########################################
 const LINES = true // true for trails on
@@ -47,7 +47,7 @@ class Sail {
 
 let sails = []
 
-for (let i = 0; i < 50; i++) { // number of sails
+for (let i = 0; i < 100; i++) { // number of sails
     const p = new THREE.Vector3(3 * Math.random() - 1.5, 3 * Math.random() - 1.5, 3 * Math.random() - 1.5);
     p.multiplyScalar(10)
     const v = new THREE.Vector3(Math.random() * 4 - 2, Math.random() * 4 - 2, Math.random() * 4 - 2);
